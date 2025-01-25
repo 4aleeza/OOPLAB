@@ -1,0 +1,45 @@
+#include <iostream>
+using namespace std;
+void billfunc(float cpu, int units, float bill, float tbill, float surcharge, string name, int id) {
+	bill = (cpu * units);
+
+	if (bill > 18000) {
+		surcharge = bill - (0.18 * bill);
+	}
+	else surcharge = 0;
+	tbill = surcharge + bill;
+
+	cout << "Customer ID: " << id << endl;
+	cout << "Customer Name: " << name << endl;
+	cout << "Amount Charges @Rs. " << cpu << "per unit: " << bill << endl;
+	cout << "Surcharge Amount: " << surcharge << endl;
+	cout << "Net Amount Paid by Customer: " << tbill << endl;
+}
+int main() {
+	string name;
+	int id;
+	int units;
+	float cpu = 0.0;
+	float bill = 0.0;
+	float tbill = 0.0;
+	float surcharge = 0.0;
+	cin >> id;
+	cin >> name;
+	cin >> units;
+	if (units <= 199) {
+		cpu = 16.20;
+		billfunc(cpu, units, bill, tbill, surcharge, name, id);
+	}
+	else if ((units >= 200) && (units <= 300)) {
+		cpu = 20.10;
+		billfunc(cpu, units, bill, tbill, surcharge, name, id);
+	}
+	else if ((units >= 300) && (units <= 500)) {
+		cpu = 27.10;
+		billfunc(cpu, units, bill, tbill, surcharge, name, id);
+	}
+	else if (units > 500) {
+		cpu = 39.50;
+		billfunc(cpu, units, bill, tbill, surcharge, name, id);
+	}
+}

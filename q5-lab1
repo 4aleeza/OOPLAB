@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+	string movie;
+	float adultprice;
+	float childprice;
+	int adultsold;
+	int childsold;
+	int totalticks;
+	float charityperc;
+	float sum;
+	float charity;
+	float netsale;
+	cout << "Enter Movie Name: ";
+	getline(cin, movie);
+	cout << "Enter Adult Ticket Price: ";
+	cin >> adultprice;
+	cout << "Enter Child Ticket Price: ";
+	cin >> childprice;
+	cout << "Enter the Number of Adult Tickets sold: ";
+	cin >> adultsold;
+	cout << "Enter the Number of Childets sold: ";
+	cin >> childsold;
+	sum = (adultprice * adultsold) + (childprice * childsold);
+	totalticks = adultsold + childsold;
+	cout << "Enter the Gross Amount to be donated to Charity: ";
+	cin >> charityperc;
+	charity = (sum * (charityperc / 100));
+	netsale = sum - charity;
+	cout << "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
+	cout << "Movie Name:............." << movie << endl;
+	cout << "Number of Tickets Sold:..........." << totalticks << endl;
+	cout << "Gross Amount:............$"<< sum << endl;
+	cout << "Percentage of Gross Amount Donated: " << charityperc << "%" << endl;
+	cout << "Amount Donated:..........$" << charity << endl;
+	cout << "Net Sale:.................$" << netsale << endl;
+}

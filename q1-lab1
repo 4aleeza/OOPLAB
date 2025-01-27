@@ -1,0 +1,24 @@
+/*Write a program that finds the second highest number in a float type array of 20
+elements using pointer.*/
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+int main() {
+	float max = -11111.111;
+	float secmax = -11111.111;
+	float arr[20];
+	for (float* ptr = arr;ptr < 20 + arr;ptr++) {
+		cin >> *ptr;
+	}
+	for (float* ptr = arr;ptr < 20 + arr;ptr++) {
+		if (*ptr > max) {
+			secmax = max;
+			max = *ptr;
+		}
+		else if ((*ptr > secmax) && (*ptr < max)) {
+			secmax = *ptr;
+		}
+	}
+	cout << "Second Maximum: " << secmax;
+}

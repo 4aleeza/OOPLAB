@@ -1,0 +1,19 @@
+/*Task 1: Write a program that calculates the sum of all the elements in array using pointers
+(Note: Generate the array via user in the main function use argv)*/
+#include <iostream>
+using namespace std;
+int main() {
+	int n;
+	int sum = 0;
+	cout << "Enter n: ";
+	cin >> n;
+	int* arr = new int[n];
+	cout << "Enter Terms To Add: ";
+	for (int* ptr = arr;ptr < arr+n;ptr++) {
+		cin >> *ptr;
+	}
+	for (int* ptr = arr;ptr < arr+n;ptr++) {
+		sum = *ptr + sum;
+	}
+	cout << "Sum: " << sum;
+}

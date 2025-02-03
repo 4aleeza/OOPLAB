@@ -1,0 +1,33 @@
+/*Write a program that creates N structures. Inside each struct are two entities, id and name. You are
+required to first sort this structure first via ID then via the first character of the name in ascending order.
+Print all the struct data in both formations.*/
+#include <iostream>
+#include <algorithm>
+using namespace std;
+struct employee {
+	int id;
+	string name;
+};
+const int n = 2;
+employee* emp = new employee[n];
+bool comparison(const employee& a,const employee& b) {
+	if (a.id == b.id) {
+		return a.name[0] < b.name[0]; //this means that if for example emp a's first letter < b's, it should return a true value, else false
+	}
+	return a.id < b.id; //and if ids are not the same, it will return true if id of a > id of b
+
+}
+int main() {
+	for (int i = 0;i < n;i++) {
+		cout << "Name: "<<endl;
+		cin >> emp->name;
+		cout << "ID: " << endl;
+		cin >> emp->id;
+	}
+	sort(emp, emp + n, comparison);
+	for (int i = 0;i < n;i++) {
+		cout << "ID: " << emp->id << "NAME: " << emp->name;
+	}
+	delete[] emp;
+
+}

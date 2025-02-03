@@ -1,0 +1,35 @@
+/*Write a program that creates a dynamic array of not values but structures. Each struct would contain
+another struct and in that struct a variable of subject should exist. The outer structure should be an ID
+and an array (Fixed) for subjects. (Note you can utilize vectors for this question)*/
+#include <iostream>
+#include <vector>
+using namespace std;
+struct inner {
+	string subject;
+};
+struct std {
+	int id;
+	inner subjects[4]; //utilizing inner struct 
+};
+int main() {
+	int n;
+	cout << "N: ";
+	cin >> n;
+	vector<std> stud(n); 
+	for (int i = 0;i < n;i++) {
+		cout << "Enter ID: "<< endl;
+		cin >> stud[i].id;
+		for (int j = 0;j < n;j++) {
+			cout << "Enter 4 subjects: ";
+			cin >> stud[i].subjects[j].subject;
+		}
+	}
+	for (int i = 0; i < n; i++) {
+		cout << "ID: " << stud[i].id << endl;
+		cout << "Subjects: ";
+		for (int j = 0; j < 4; j++) {
+			cout << stud[i].subjects[j].subject;
+		}
+		cout << endl;
+	}
+}

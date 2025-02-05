@@ -1,0 +1,50 @@
+#include <iostream>
+using namespace std;
+
+class Employee {
+public:
+    string firstname;
+    string lastname;
+    double salary;
+};
+
+void promote(Employee& obj1, Employee& obj2, float x) {
+    float total1 = obj1.salary + (obj1.salary * x);
+    float total2 = obj2.salary + (obj2.salary * x);
+    cout << "Employee Name: " << obj1.firstname << " " << obj1.lastname << endl;
+    cout << "Salary: " << obj1.salary << endl;
+    cout << "Employee Name: " << obj2.firstname << " " << obj2.lastname << endl;
+    cout << "Salary: " << obj2.salary << endl;
+    cout << "Updated Stats: " << endl;
+    cout << "Employee Name: " << obj1.firstname << " " << obj1.lastname << endl;
+    cout << "Promoted to Salary: " << total1 << endl;
+
+    cout << "Employee Name: " << obj2.firstname << " " << obj2.lastname << endl;
+    cout << "Promoted to Salary: " << total2 << endl;
+}
+
+int main() {
+    Employee obj1, obj2;
+    cout << "Enter First Name for Employee 1: ";
+    cin >> obj1.firstname;
+    cout << "\nEnter Last Name for Employee 1: ";
+    cin >> obj1.lastname;
+    cout << "\nEnter Salary for Employee 1: ";
+    cin >> obj1.salary;
+    if (obj1.salary < 0) {
+        obj1.salary = 0;
+    }
+    cout << "Enter First Name for Employee 2: ";
+    cin >> obj2.firstname;
+    cout << "\nEnter Last Name for Employee 2: ";
+    cin >> obj2.lastname;
+    cout << "\nEnter Salary for Employee 2: ";
+    cin >> obj2.salary;
+    if (obj2.salary < 0) {
+        obj2.salary = 0;
+    }
+    float raisePercentage = 0.1; 
+    promote(obj1, obj2, raisePercentage);
+
+    return 0;
+}

@@ -1,0 +1,55 @@
+/*We are prototyping a robot that refills glasses during dinner. 
+Every glass holds 200 milliliters. During dinner,
+people either drink water or juice, 
+and as soon as there is less than 100 ml left in the glass, the robot refills it back
+to 200 ml.
+Create a class Glass with one public int field LiquidLevel and methods public Drink(int milliliters) 
+that takes the amount of liquid that a person drank
+and public Refill() that refills the glass to be 200 ml full. 
+Both methods should not return any value. Initially set LiquidLevel to 200. 
+In the Main method create an object of class Glass
+and read commands from the screen until the user terminates the program (see next). 
+Dont forget to refill the glass when needed!*/
+
+#include <iostream>
+#include <string>
+using namespace std;
+int main() {
+	class Glass {
+	public:
+		int liquidlevel=200;
+		void Refill() {
+			liquidlevel = 200;
+			cout << "Glass refilled to " << liquidlevel << "ml. " << endl;
+		}
+		void Drink(int milliliters) {
+			liquidlevel = liquidlevel - milliliters;
+			cout << "You drank " << milliliters << "ml. " << "Remaining Amount: " << liquidlevel << "ml. " << endl;
+			if (liquidlevel < 100) {
+				Refill();
+			}
+		}
+	};
+	Glass obj;
+	int milliliters;
+	string s;
+	while (1) {
+		cout << "Enter the amount you drank: (ENTER 'QUIT' TO EXIT)";
+		cin >> s;
+		if (s == "QUIT") {
+			break;
+		}
+		try {
+			milliliters = stoi(s);
+			if (milliliters < 0) {
+				cout << "INVALID \n";
+			}
+			else {
+				obj.Drink(milliliters);
+			}
+		}
+			catch(const exception& e) {
+				cout << "Invalid Format\n";
+			}
+		}
+	}

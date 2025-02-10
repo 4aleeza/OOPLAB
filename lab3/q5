@@ -1,0 +1,55 @@
+/*Create a class called Book to represent a book. A Book should include four pieces of information as instance
+variables‐a book name, an ISBN number, an author name and a publisher. Provide methods (query method) for
+each instance variable. Inaddition, provide a method named getBookInfo that returns the description of the book
+as a String (the description should include all the information about the book). You should use this keyword in
+member methods and constructor. Write a test application named BookTest to create an array of object for 5
+elements for class Book to demonstrate the class Book's capabilities.*/
+#include <iostream>
+using namespace std;
+class Book {
+private:
+	string name;
+	int ISBN;
+	string author;
+	string publisher;
+public:
+	Book(string name, int ISBN, string author, string publisher) {
+		this->name = name;
+		this->ISBN = ISBN;
+		this->author = author;
+		this->publisher = publisher;
+	}
+	string getname() {
+		return this->name;
+	}
+	int getisbn() {
+		return this->ISBN;
+	}
+	string getauthor() {
+		return this->author;
+	}
+	string getpublisher() {
+		return this->publisher;
+	}
+
+	void getbookinfo() {
+		cout << "Book Name: " << this->name << endl;
+		cout << "ISBN: " << this->ISBN << endl;
+		cout << "Author: " << this->author << endl;
+		cout << "Publisher: " << this->publisher << endl;
+		cout << "------------------------------------------";
+		cout << endl;
+	}
+};
+int main() {
+	Book book[5]={
+		Book("Stranger Things", 1, "Noah Cardail", "NY Times"),
+		Book("China", 2221, "Ching Chong", "China Times"),
+		Book("Dark", 234, "Holland", "AmericanTM"),
+		Book("DEMOCRACY", 114, "Hilary Clinton", "AmericanTM"),
+		Book("Guns", 234, "Georgie Jr", "Texas Books"),
+	};
+	for (int i = 0;i < 5;i++) {
+		book[i].getbookinfo();
+	}
+}

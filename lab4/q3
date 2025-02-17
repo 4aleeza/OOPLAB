@@ -1,0 +1,46 @@
+/*Create A class called Invoice that a hardware store might use to represent an invoice for an item sold at the
+store. An Invoice should include four pieces of information as instance variables - a part number (type String), a
+part description (type String), a quantity of the item being purchased (type int) and a price per item (double).
+
+Your class should have a constructor that initialize the four instance variables. In addition, provide a method
+named getInvoiceAmount that calculates the invoice amount (i.e., multiples the quantity by the price per item),
+then returns the amount as a double value. If the quantity is not positive, it should be set to 0. If the price per
+item is not positive, it should be set to 0.0.*/
+#include <iostream>
+using namespace std;
+class Invoice {
+	string pn; //part number
+	string desc; 
+	int quan; //quantity
+	double ppi; //price per item
+	double ia; // invoice amount
+public:
+	Invoice(string, string, int, double);
+	double getinvoiceamount() {
+		if (quan < 0) {
+			quan = 0;
+		}
+		if (ppi < 0) {
+			ppi = 0.0;
+		}
+		ia = quan * ppi;
+		return ia;
+	}
+};
+Invoice::Invoice(string a, string b, int c, double d) {
+	pn = a;
+	desc = b;
+	quan = c;
+	ppi = d;
+}
+int main() {
+	string a; string b; int c; double d;
+	cout << "Enter pn, desc, quan, ppi: \n";
+	cin >> a;
+	cin >> b; 
+	cin >> c; 
+	cin >> d;
+	Invoice obj(a, b, c, d);
+	double retval = obj.getinvoiceamount();
+	cout << retval;
+}

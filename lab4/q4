@@ -1,0 +1,84 @@
+/*A book shop maintains the inventory of books that are being sold at the shop. The list includes details such as
+author, title, price, publisher and stock position. Whenever a customer wants a book, the sales person inputs the
+title and author and the system searches the list and displays whether it is available or not. If it is not, an
+appropriate message is displayed. If it is, then the system displays the book details and requests for the number
+of copies required. If the requested copies are available, the total cost of the requested copies is displayed;
+otherwise "Required copies not in stock" is displayed. Design a system using a class called books with suitable
+member functions and constructors.*/
+
+#include <iostream>
+using namespace std;
+
+class books {
+    string author, title, publisher;
+    float price;
+    int stockpos;
+
+public:
+    books(string t = "", string a = "") : title(t), author(a), price(0), stockpos(0) {} // Default values added
+    
+    void input() {
+        cout << "Enter Book Title: ";
+        cin >> title;
+        cout << "Enter Author Name: ";
+        cin >> author;
+        cout << "Enter Publisher: ";
+        cin >> publisher;
+        cout << "Enter Price: ";
+        cin >> price;
+        cout << "Enter Stock Position: ";
+        cin >> stockpos;
+    }
+    
+    bool search(string t, string a) {
+        return (title == t) && (author == a); // returns true when match
+    }
+    
+    void display() {
+        cout << "\nTitle: " << title << endl;
+        cout << "Author: " << author << endl;
+        cout << "Price: " << price << endl;
+        cout << "Stock Position: " << stockpos << endl;
+    }
+    
+    void purchase(int n) {
+        if (n <= stockpos) {
+            cout << "\nTotal Cost: " << price * n << endl;
+            stockpos -= n;
+        }
+        else cout << "Required copies not in stock\n";
+    }
+};
+
+int main() {
+    const int x = 3; // Number of books
+    books stock[x] = { books("Book1", "Author1"), books("Book2", "Author2"), books("Book3", "Author3") };
+    
+    for (int i = 0; i < x; i++) {
+        cout << "\nPlease Enter Details for the Book " << i + 1 << ": ";
+        stock[i].input();
+    }
+    
+    string searchTitle, searchAuthor;
+    cout << "\nEnter book title and author to search: ";
+    cin >> searchTitle >> searchAuthor;
+
+    bool found = false;
+    for (int i = 0; i < x; i++) { // Changed 'size' to 'x'
+        if (stock[i].search(searchTitle, searchAuthor)) {
+            found = true;
+            stock[i].display();
+            int copies;
+            cout << "Enter number of copies required: ";
+            cin >> copies;
+            stock[i].purchase(copies);
+            break;
+        }
+    }
+    
+    if (!found) {
+        cout << "Book not available in inventory." << endl;
+    }
+    
+    return 0;
+}

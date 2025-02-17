@@ -1,0 +1,31 @@
+/*Your task is to create a Circle constructor that creates a circle with a radius provided by an argument. The
+circles constructed must have two getters getArea() (PIr^2) and getPerimeter() (2PI*r) which give both
+respective areas and perimeter (circumference).*/
+#include <iostream>
+#include <math.h>
+using namespace std;
+class Circle {
+	float PI=3.142, r;
+public:
+	Circle(float);
+	void getarea() {
+		cout << "\nfor area: " << endl;
+		//cout << "enter r: ";
+		//cin >> r;
+		cout << "\narea: " << (PI * r * r);
+	}
+	void getperimeter() {
+			cout << "\nfor perimeter: " << endl;
+			//cout << "enter r: ";
+			//cin >> r;
+			cout << "\nperimeter: " << (PI * 2 * r);
+	}
+};
+Circle::Circle(float x){
+	r = x;
+}
+int main() {
+	Circle obj(3);
+	obj.getarea();
+	obj.getperimeter();
+}

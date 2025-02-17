@@ -1,0 +1,44 @@
+/*Create an Account class that a bank might use to represent customers bank accounts. Include a data member to
+represent the account balance. Provide three member functions. Member function credit should add an amount
+to the current balance. Member function debits should withdraw money from the Account. Member function get
+Balance should return the current balance.*/
+#include <iostream>
+using namespace std;
+class Account {
+	float balance;
+	float amount; //to add
+	float money; //to withdraw
+public:
+	Account(float, float, float);
+	void credit() {
+		balance = balance + amount;
+		cout << "Balance After Adding " << amount << "PKR is " << balance << endl;
+	}
+	void debit() {
+		balance = balance - money;
+		cout << "Balance After Deduction " << money << "PKR is " << balance << endl;
+	}
+	float getbalance() {
+		return balance;
+	}
+};
+Account::Account(float x, float y, float z) {
+	balance = x;
+	amount = y;
+	money = z;
+}
+int main() {
+	int n;
+	Account obj(10000, 5000, 2000);
+	cout << "PRESS 1 TO ENTER CREDIT SETTINGS\nPRESS 2 TO ENTER DEBIT SETTINGS\n";
+	cin >> n;
+	if (n == 1) {
+		obj.credit();
+		obj.getbalance();
+	}
+	else if (n == 2) {
+		obj.debit();
+		obj.getbalance();
+	}
+	else cout << "INVALID\n";
+}

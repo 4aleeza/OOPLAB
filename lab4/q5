@@ -1,0 +1,136 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX_ORD = 5;
+const int MENU_SIZE = 5;
+
+struct MenuItem {
+    string name;
+    string type;
+    float price;
+};
+
+class CoffeeShop {
+private:
+    string name;
+    MenuItem menu[MENU_SIZE];
+    string orders[MAX_ORD];
+    int orderCount = 0;
+
+public:
+    CoffeeShop(string n) : name(n) {
+        cout << "Welcome to " << name << "! Enter your menu items.\n";
+        for (int i = 0; i < MENU_SIZE; i++) {
+            cout << "Enter Item [" << i + 1 << "] Name: ";
+            cin >> menu[i].name;
+            cout << "Enter Type (food/drink): ";
+            cin >> menu[i].type;
+            cout << "Enter Price: ";
+            cin >> menu[i].price;
+        }
+    }
+
+    string addOrder(string itemName) {
+        if (orderCount >= MAX_ORD) return "Order list is full!";
+        for (int i = 0; i < MENU_SIZE; i++) {
+            if (menu[i].name == itemName) {
+                orders[orderCount++] = itemName;
+                return "Order added: " + itemName;
+            }
+        }
+        return "This item is currently unavailable";
+    }
+
+    string fulfillOrder() {
+        if (orderCount == 0) return "All orders have been fulfilled";
+        string fulfilledItem = orders[0];
+        for (int i = 1; i < orderCount; i++) {
+            orders[i - 1] = orders[i];
+        }
+        orderCount--;
+        return "The " + fulfilledItem + " is ready";
+    }
+
+    void listOrders() {
+        if (orderCount == 0) {
+            cout << "No orders have been placed.\n";
+            return;
+        }
+        cout << "Current Orders:\n";
+        for (int i = 0; i < orderCount; i++) {
+            cout << i + 1 << ". " << orders[i] << endl;
+        }
+    }
+
+    float dueAmount() {
+        float total = 0;
+        for (int i = 0; i < orderCount; i++) {
+            for (int j = 0; j < MENU_SIZE; j++) {
+                if (orders[i] == menu[j].name) {
+                    total += menu[j].price;
+                    break;
+                }
+            }
+        }
+        return total;
+    }
+
+    string cheapestItem() {
+        int index = 0;
+        for (int i = 1; i < MENU_SIZE; i++) {
+            if (menu[i].price < menu[index].price) {
+                index = i;
+            }
+        }
+        return menu[index].name;
+    }
+
+    void drinksOnly() {
+        cout << "Drinks Available:\n";
+        for (int i = 0; i < MENU_SIZE; i++) {
+            if (menu[i].type == "drink") {
+                cout << "- " << menu[i].name << endl;
+            }
+        }
+    }
+
+    void foodOnly() {
+        cout << "Food Available:\n";
+        for (int i = 0; i < MENU_SIZE; i++) {
+            if (menu[i].type == "food") {
+                cout << "- " << menu[i].name << endl;
+            }
+        }
+    }
+};
+
+int main() {
+    CoffeeShop shop("Caffeine Haven");
+
+    cout << "\nAdding Orders:\n";
+    cout << shop.addOrder("Coffee") << endl;
+    cout << shop.addOrder("Sandwich") << endl;
+    cout << shop.addOrder("Tea") << endl;
+
+    cout << "\nOrders List:\n";
+    shop.listOrders();
+
+    cout << "\nTotal Due: $" << shop.dueAmount() << endl;
+    cout << "Cheapest Item: " << shop.cheapestItem() << endl;
+
+    cout << "\nDrinks Menu:\n";
+    shop.drinksOnly();
+
+    cout << "\nFood Menu:\n";
+    shop.foodOnly();
+
+    cout << "\nFulfilling Orders:\n";
+    cout << shop.fulfillOrder() << endl;
+    cout << shop.fulfillOrder() << endl;
+
+    cout << "\nOrders After Fulfillment:\n";
+    shop.listOrders();
+
+    return 0;
+}

@@ -1,0 +1,124 @@
+#include <iostream>
+#include <limits.h>
+using namespace std;
+
+float sum = 0;
+float max = -9999999.999999;
+float min = 9999999.999999;
+
+class CoffeeShop {
+public:
+    string buffercheapest;
+    string name;
+    string* menu;
+    string* items;
+    string* orders;
+    float* price;
+    int ordercount = 0;
+    int n;
+
+    CoffeeShop(string shopName, int numItems) : name(shopName), n(numItems) {
+        menu = new string[n];   
+        items = new string[n];  
+        price = new float[n];   
+        orders = new string[5]; 
+
+        for (int i = 0; i < n; i++) {
+            cout << "Item " << i << ": " << endl;
+            cin >> menu[i]; 
+            cout << "Price for " << menu[i] << ": " << endl;
+            cin >> price[i]; 
+        }
+    }
+
+    void addorder(string ord) {
+        if (ordercount < 5) { 
+            bool found = false;
+            for (int i = 0; i < n; i++) {
+                if (ord == menu[i]) { 
+                    orders[ordercount] = ord;
+                    ordercount++;
+                    cout << ord << " added to your order.\n";
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                cout << "This item is currently unavailable!\n";
+            }
+        }
+        else {
+            cout << "Maximum capacity reached for orders!\n"; 
+        }
+    }
+
+    void fullfillorder() {
+        if (ordercount == 0) {
+            cout << "All orders have been fulfilled.\n"; 
+        }
+        else {
+            cout << "The " << orders[0] << " is ready!\n";  
+            for (int i = 1; i < ordercount; i++) {
+                orders[i - 1] = orders[i];
+            }
+            ordercount--; 
+        }
+    }
+
+    void listorder() {
+        if (ordercount == 0) {
+            cout << "No orders placed.\n";  
+        }
+        else {
+            cout << "Orders placed:\n";
+            for (int i = 0; i < ordercount; i++) {
+                cout << orders[i] << endl; 
+            }
+        }
+    }
+
+    float dueamount() {
+        sum = 0;  
+        for (int i = 0; i < ordercount; i++) {
+            for (int j = 0; j < n; j++) {
+                if (menu[j] == orders[i]) {  
+                    sum += price[j];
+                    break;
+                }
+            }
+        }
+        return sum; 
+    }
+
+    void cheapestitem() {
+        for (int i = 0; i < n; i++) {
+            if (price[i] < min) { 
+                min = price[i];
+                buffercheapest = menu[i];
+            }
+        }
+        cout << "Cheapest item on the menu: " << buffercheapest << endl;
+    }
+
+    ~CoffeeShop() {
+        delete[] menu;
+        delete[] items;
+        delete[] orders;
+        delete[] price;
+    }
+};
+
+int main() {
+    int num_items;
+    cout << "Enter the number of items in the menu: ";
+    cin >> num_items;
+
+    CoffeeShop myShop("Coffee", num_items);
+    myShop.addorder("coffee");
+    myShop.addorder("muffin");
+    myShop.addorder("tea");
+
+    myShop.fullfillorder();
+
+    myShop.listorder(); 
+}

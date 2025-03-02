@@ -1,0 +1,27 @@
+/*Task 5: Write a C++ Program which consists of a class named car with attributes engine
+horsepower, seating_capacity and no_of_speakers. You must change the values of the public
+attributes but via the constant function.*/
+#include <iostream>
+using namespace std;
+class Car {
+public:
+	int horsepwr = 66;
+	int seating_capacity = 1500;
+	int no_of_speakers = 849;
+	void display() {
+		cout << "horsepwr: " << horsepwr << endl;
+		cout << "seating_capacity: " << seating_capacity << endl;
+		cout << "no_of_speakers: " << no_of_speakers << endl;
+	}
+	void const func(int hp, int sc, int ns) {
+		horsepwr = hp;
+		seating_capacity = sc;
+		no_of_speakers = ns;
+	}
+};
+int main() {
+	Car obj;
+	obj.display();
+	obj.func(21, 88, 910);
+	obj.display();
+}

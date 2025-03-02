@@ -1,0 +1,47 @@
+/*Task 4: Write a C++ program that has a class called Juice Maker with the method blend juice
+and grind juice which composes two classes Blend and grind. The blend juice should blend the
+juice (i.e. select fruits and loop the class function in the blend for about 4 to 5 seconds) and do
+the same for the grind class only this time you should sleep the program for 5 seconds (to
+mimick the grinding process).*/
+#include <iostream>
+#include <windows.h>
+using namespace std;
+class Blend {
+	string f1, f2, f3;
+public:
+	Blend(string f1, string f2, string f3) :f1(f1), f2(f2), f3(f3) {};
+	void loop() {
+		for (int i = 0;i < 5;i++) {
+			cout << "BLENDING...\n";
+			Sleep(1000);
+			cout << "Blended Successfully\n";
+			cout << "Ingredients: " << f1 << ", " << f2 << ", " << f3 << "." << endl;
+		}
+	}
+};
+class Grind {
+	string f1, f2, f3;
+public:
+	Grind(string f1, string f2, string f3) :f1(f1), f2(f2), f3(f3) {};
+	void loop2() {
+		cout << "GRINDING...\n";
+		Sleep(5000);
+		cout << "Grinded Successfully\n";
+		cout << "Ingredients: " << f1 << ", " << f2 << ", " << f3 << "." << endl;
+	}
+};
+class Juicemaker {
+	Blend b;
+	Grind g;
+public:
+	Juicemaker(string f1, string f2, string f3) :b(f1, f2, f3), g(f1, f2, f3) {};
+	void makeJuice() {
+		b.loop();
+		g.loop2();
+		cout << "Juice is ready to serve!\n";
+	}
+};
+int main() {
+	Juicemaker test("apples", "bannanas", "mangoes");
+	test.makeJuice();
+}

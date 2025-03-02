@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <memory>
+
+using namespace std;
+
+class Book {
+public:
+    string title;
+    string isbn;
+    Book(string title, string isbn) : title(title), isbn(isbn) {}
+};
+
+class Catalog {
+public:
+    unordered_map<string, Book*> books;
+
+    void addBook(Book* book) {
+        books[book->isbn] = book;
+    }
+
+    Book* findBookByISBN(string isbn) {
+        if (books.find(isbn) != books.end()) {
+            return books[isbn];
+        }
+        return nullptr;
+    }
+};
+
+class Library {
+public:
+    string name;
+    string address;
+    Catalog catalog;
+    Library(string name, string address) : name(name), address(address) {}
+
+    void addBook(Book* book) {
+        catalog.addBook(book);
+    }
+
+    Book* findBookInCatalog(string isbn) {
+        return catalog.findBookByISBN(isbn);
+    }
+};
+
+int main() {
+    Library lib("City Library", "123 Main St");
+
+    Book* book1 = new Book("The Great Gatsby", "12345");
+    Book* book2 = new Book("1984", "67890");
+
+    lib.addBook(book1);
+    lib.addBook(book2);
+
+    Book* foundBook = lib.findBookInCatalog("12345");
+    if (foundBook) {
+        cout << "Found Book: " << foundBook->title << endl;
+    } else {
+        cout << "Book not found" << endl;
+    }
+
+    return 0;
+}

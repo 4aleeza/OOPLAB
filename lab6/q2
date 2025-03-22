@@ -1,0 +1,102 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Base class
+class Vehicles {
+protected:
+    float price;
+public:
+    void setPrice(float p) {
+        price = p;
+    }
+    float getPrice() {
+        return price;
+    }
+};
+
+// Derived class: Car from Vehicles
+class Car : public Vehicles {
+protected:
+    int seatingCapacity;
+    int numberOfDoors;
+    string fuelType; // diesel or petrol
+public:
+    void setCarDetails(int seat, int doors, string fuel) {
+        seatingCapacity = seat;
+        numberOfDoors = doors;
+        fuelType = fuel;
+    }
+};
+
+// Derived class: Motorcycle from Vehicles
+class Motorcycle : public Vehicles {
+protected:
+    int numberOfCylinders;
+    int numberOfGears;
+    int numberOfWheels;
+public:
+    void setMotorcycleDetails(int cyl, int gears, int wheels) {
+        numberOfCylinders = cyl;
+        numberOfGears = gears;
+        numberOfWheels = wheels;
+    }
+};
+
+// Audi class derived from Car
+class Audi : public Car {
+private:
+    string modelType;
+public:
+    void setModelType(string model) {
+        modelType = model;
+    }
+    void displayAudiDetails() {
+        cout << "Audi Car Details:" << endl;
+        cout << "Price: $" << price << endl;
+        cout << "Seating Capacity: " << seatingCapacity << endl;
+        cout << "Number of Doors: " << numberOfDoors << endl;
+        cout << "Fuel Type: " << fuelType << endl;
+        cout << "Model Type: " << modelType << endl;
+    }
+};
+
+// Yamaha class derived from Motorcycle
+class Yamaha : public Motorcycle {
+private:
+    string makeType;
+public:
+    void setMakeType(string make) {
+        makeType = make;
+    }
+    void displayYamahaDetails() {
+        cout << "Yamaha Motorcycle Details:" << endl;
+        cout << "Price: $" << price << endl;
+        cout << "Number of Cylinders: " << numberOfCylinders << endl;
+        cout << "Number of Gears: " << numberOfGears << endl;
+        cout << "Number of Wheels: " << numberOfWheels << endl;
+        cout << "Make Type: " << makeType << endl;
+    }
+};
+
+int main() {
+    // Create Audi object
+    Audi audiCar;
+    audiCar.setPrice(50000);
+    audiCar.setCarDetails(5, 4, "Petrol");
+    audiCar.setModelType("A6");
+    
+    // Create Yamaha motorcycle object
+    Yamaha yamahaBike;
+    yamahaBike.setPrice(15000);
+    yamahaBike.setMotorcycleDetails(2, 6, 2);
+    yamahaBike.setMakeType("R-Series");
+
+    cout << "---------------------------" << endl;
+    audiCar.displayAudiDetails();
+    cout << "---------------------------" << endl;
+    yamahaBike.displayYamahaDetails();
+    cout << "---------------------------" << endl;
+
+    return 0;
+}

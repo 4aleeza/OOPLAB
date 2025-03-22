@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Base class
+class Books {
+protected:
+    string genre;
+public:
+    void setGenre(string g) {
+        genre = g;
+    }
+    string getGenre() {
+        return genre;
+    }
+};
+
+// Derived class for Mystery books
+class MysteryBook : public Books {
+private:
+    string title;
+    string author;
+public:
+    void setDetails(string t, string a) {
+        title = t;
+        author = a;
+        genre = "Mystery";
+    }
+    void displayDetails() {
+        cout << "Genre: " << genre << endl;
+        cout << "Title: " << title << endl;
+        cout << "Author: " << author << endl;
+    }
+};
+
+// Derived class for Novel books
+class NovelBook : public Books {
+private:
+    string title;
+    string author;
+public:
+    void setDetails(string t, string a) {
+        title = t;
+        author = a;
+        genre = "Novel";
+    }
+    void displayDetails() {
+        cout << "Genre: " << genre << endl;
+        cout << "Title: " << title << endl;
+        cout << "Author: " << author << endl;
+    }
+};
+
+int main() {
+    // Create Mystery book object
+    MysteryBook mystery;
+    mystery.setDetails("The Hound of the Baskervilles", "Arthur Conan Doyle");
+
+    // Create Novel book object
+    NovelBook novel;
+    novel.setDetails("Pride and Prejudice", "Jane Austen");
+
+    cout << "Mystery Book Details:" << endl;
+    mystery.displayDetails();
+    cout << endl;
+
+    cout << "Novel Book Details:" << endl;
+    novel.displayDetails();
+
+    return 0;
+}

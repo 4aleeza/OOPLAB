@@ -1,0 +1,87 @@
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+class MediaFile {
+protected:
+    string filePath;
+    int fileSize;
+public:
+    MediaFile(const string& path, int size) : filePath(path), fileSize(size) {}
+    virtual void play() { cout << "Playing media: " << filePath << endl; }
+    virtual void stop() { cout << "Stopping media: " << filePath << endl; }
+    virtual void displayInfo() {
+        cout << "File: " << filePath << ", Size: " << fileSize << " KB" << endl;
+    }
+    virtual ~MediaFile() {}
+};
+
+class VisualMedia : virtual public MediaFile {
+protected:
+    string resolution;
+public:
+    VisualMedia(const string& path, int size, const string& res)
+        : MediaFile(path, size), resolution(res) {}
+    void displayInfo() override {
+        MediaFile::displayInfo();
+        cout << "Resolution: " << resolution << endl;
+    }
+};
+
+class AudioMedia : virtual public MediaFile {
+protected:
+    int sampleRate;
+public:
+    AudioMedia(const string& path, int size, int rate)
+        : MediaFile(path, size), sampleRate(rate) {}
+    void displayInfo() override {
+        MediaFile::displayInfo();
+        cout << "Sample Rate: " << sampleRate << " Hz" << endl;
+    }
+};
+
+class ImageFile : public VisualMedia {
+public:
+    ImageFile(const string& path, int size, const string& res)
+        : MediaFile(path, size), VisualMedia(path, size, res) {}
+    void play() override { cout << "Displaying image: " << filePath << endl; }
+    void stop() override { cout << "Image closed: " << filePath << endl; }
+};
+
+class AudioFile : public AudioMedia {
+public:
+    AudioFile(const string& path, int size, int rate)
+        : MediaFile(path, size), AudioMedia(path, size, rate) {}
+    void play() override { cout << "Playing audio: " << filePath << endl; }
+    void stop() override { cout << "Audio stopped: " << filePath << endl; }
+};
+
+class VideoFile : public VisualMedia, public AudioMedia {
+public:
+    VideoFile(const string& path, int size, const string& res, int rate)
+        : MediaFile(path, size), VisualMedia(path, size, res), AudioMedia(path, size, rate) {}
+    void play() override { cout << "Playing video: " << filePath << endl; }
+    void stop() override { cout << "Video stopped: " << filePath << endl; }
+    void displayInfo() override {
+        MediaFile::displayInfo();
+        cout << "Resolution: " << resolution << ", Sample Rate: " << sampleRate << " Hz" << endl;
+    }
+};
+
+int main() {
+    vector<MediaFile*> library;
+    library.push_back(new ImageFile("image.jpg", 2048, "1920x1080"));
+    library.push_back(new AudioFile("song.mp3", 5120, 44100));
+    library.push_back(new VideoFile("movie.mp4", 102400, "1920x1080", 48000));
+
+    for (auto media : library) {
+        media->displayInfo();
+        media->play();
+        media->stop();
+        cout << "------------------------\n";
+    }
+
+    for (auto media : library) delete media;
+    return 0;
+}

@@ -1,0 +1,143 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+// Base Employee class
+class Employee {
+protected:
+    int id;
+    string name;
+public:
+    Employee(int id, string name) : id(id), name(name) {}
+    virtual void displayInfo() const {
+        cout << "Employee ID: " << id << ", Name: " << name << endl;
+    }
+    virtual ~Employee() = default;
+};
+
+// Interface classes
+class IOrderTaker {
+public:
+    virtual void takeOrder() = 0;
+    virtual ~IOrderTaker() = default;
+};
+
+class IOrderPreparer {
+public:
+    virtual void prepareOrder() = 0;
+    virtual ~IOrderPreparer() = default;
+};
+
+class IBiller {
+public:
+    virtual void generateBill() = 0;
+    virtual ~IBiller() = default;
+};
+
+// Waiter class
+class Waiter : public Employee, public IOrderTaker {
+public:
+    Waiter(int id, string name) : Employee(id, name) {}
+    void takeOrder() override {
+        cout << name << " (Waiter) is taking the order." << endl;
+    }
+};
+
+// Chef class
+class Chef : public Employee, public IOrderPreparer {
+public:
+    Chef(int id, string name) : Employee(id, name) {}
+    void prepareOrder() override {
+        cout << name << " (Chef) is preparing the order." << endl;
+    }
+};
+
+// Cashier class
+class Cashier : public Employee, public IBiller {
+public:
+    Cashier(int id, string name) : Employee(id, name) {}
+    void generateBill() override {
+        cout << name << " (Cashier) is generating the bill." << endl;
+    }
+};
+
+// Manager (multi-role employee)
+class Manager : public Employee, public IOrderTaker, public IBiller {
+public:
+    Manager(int id, string name) : Employee(id, name) {}
+    void takeOrder() override {
+        cout << name << " (Manager) is taking the order." << endl;
+    }
+    void generateBill() override {
+        cout << name << " (Manager) is generating the bill." << endl;
+    }
+};
+
+// Base Menu class
+class Menu {
+public:
+    virtual double calculateTotalCost() = 0;
+    virtual ~Menu() = default;
+};
+
+// FoodMenu
+class FoodMenu : public Menu {
+    vector<double> prices;
+public:
+    FoodMenu(vector<double> prices) : prices(prices) {}
+    double calculateTotalCost() override {
+        double sum = 0;
+        for (double p : prices) sum += p;
+        return sum;
+    }
+};
+
+// BeverageMenu with tax
+class BeverageMenu : public Menu {
+    vector<double> prices;
+    const double taxRate = 0.10;
+public:
+    BeverageMenu(vector<double> prices) : prices(prices) {}
+    double calculateTotalCost() override {
+        double sum = 0;
+        for (double p : prices) sum += p;
+        return sum + sum * taxRate;
+    }
+};
+
+int main() {
+    // Create employees
+    Waiter w1(1, "Alice");
+    Chef c1(2, "Bob");
+    Cashier cash1(3, "Charlie");
+    Manager m1(4, "Diana");
+
+    // Polymorphic list of IOrderTakers
+    vector<IOrderTaker*> orderTakers;
+    orderTakers.push_back(&w1);
+    orderTakers.push_back(&m1);
+
+    cout << "--- Order Takers in Action ---" << endl;
+    for (auto taker : orderTakers) {
+        taker->takeOrder();
+    }
+
+    // Chef preparing order
+    cout << "--- Chef preparing order ---" << endl;
+    c1.prepareOrder();
+
+    // Biller generating bill
+    cout << "--- Generating Bill ---" << endl;
+    cash1.generateBill();
+    m1.generateBill();
+
+    // Menu cost calculation
+    FoodMenu fm({10, 20, 30});
+    BeverageMenu bm({5, 10, 15});
+
+    cout << "Total food menu cost: $" << fm.calculateTotalCost() << endl;
+    cout << "Total beverage menu cost (with tax): $" << bm.calculateTotalCost() << endl;
+
+    return 0;
+}

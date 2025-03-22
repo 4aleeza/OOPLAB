@@ -1,0 +1,84 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Base class: Student
+class Student {
+protected:
+    string name;
+    int rollNo;
+    string department;
+public:
+    void setStudentDetails(string n, int r, string d) {
+        name = n;
+        rollNo = r;
+        department = d;
+    }
+    void displayStudentDetails() {
+        cout << "Student Name: " << name << endl;
+        cout << "Roll No: " << rollNo << endl;
+        cout << "Department: " << department << endl;
+    }
+};
+
+// Derived class: Marks from Student
+class Marks : public Student {
+protected:
+    int course1, course2, course3, course4, course5;
+public:
+    void setMarks(int c1, int c2, int c3, int c4, int c5) {
+        course1 = c1;
+        course2 = c2;
+        course3 = c3;
+        course4 = c4;
+        course5 = c5;
+    }
+    void displayMarks() {
+        cout << "Marks obtained in courses:" << endl;
+        cout << "Course 1: " << course1 << endl;
+        cout << "Course 2: " << course2 << endl;
+        cout << "Course 3: " << course3 << endl;
+        cout << "Course 4: " << course4 << endl;
+        cout << "Course 5: " << course5 << endl;
+    }
+};
+
+// Derived class: Result from Marks
+class Result : public Marks {
+private:
+    int totalMarks;
+    float averageMarks;
+public:
+    void calculateResult() {
+        totalMarks = course1 + course2 + course3 + course4 + course5;
+        averageMarks = totalMarks / 5.0;
+    }
+    void displayResult() {
+        cout << "Total Marks: " << totalMarks << endl;
+        cout << "Average Marks: " << averageMarks << endl;
+    }
+};
+
+int main() {
+    Result studentResult;
+
+    // Setting student details
+    studentResult.setStudentDetails("Ali Ahmed", 101, "Computer Science");
+
+    // Setting marks for 5 courses
+    studentResult.setMarks(85, 90, 78, 88, 92);
+
+    // Calculate total and average
+    studentResult.calculateResult();
+
+    // Display all details
+    cout << "-------------------------" << endl;
+    studentResult.displayStudentDetails();
+    cout << "-------------------------" << endl;
+    studentResult.displayMarks();
+    cout << "-------------------------" << endl;
+    studentResult.displayResult();
+    cout << "-------------------------" << endl;
+
+    return 0;
+}

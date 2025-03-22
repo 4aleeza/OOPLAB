@@ -1,0 +1,170 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class BankAccount {
+protected:
+    int accno;
+    double balance;
+public:
+    BankAccount(int a, double b) : accno(a), balance(b) {}
+    virtual void deposit(double amount) {
+        balance += amount;
+        cout << "Deposited: " << amount << ". New Balance: " << balance << endl;
+    }
+    virtual void withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            cout << "Withdrawn: " << amount << ". New Balance: " << balance << endl;
+        } else {
+            cout << "Insufficient balance. Withdrawal failed.\n";
+        }
+    }
+    virtual void display() {
+        cout << "Account No: " << accno << " | Balance: " << balance << endl;
+    }
+    virtual ~BankAccount() {}
+};
+
+class SavingsAccount : public BankAccount {
+    double interestRate;
+public:
+    SavingsAccount(int a, double b, double rate) : BankAccount(a, b), interestRate(rate) {}
+    void applyInterest() {
+        double interest = balance * (interestRate / 100.0);
+        balance += interest;
+        cout << "Interest of " << interest << " applied. New Balance: " << balance << endl;
+    }
+    void display() override {
+        cout << "Savings ";
+        BankAccount::display();
+    }
+};
+
+class CheckingAccount : public BankAccount {
+    double overdraftLimit;
+public:
+    CheckingAccount(int a, double b, double limit) : BankAccount(a, b), overdraftLimit(limit) {}
+    void withdraw(double amount) override {
+        if (balance - amount >= -overdraftLimit) {
+            balance -= amount;
+            cout << "Withdrawn: " << amount << ". New Balance: " << balance << endl;
+            if (balance < 0) cout << "Warning: Overdraft used!\n";
+        } else {
+            cout << "Alert! Overdraft limit exceeded.\n";
+        }
+    }
+    void display() override {
+        cout << "Checking ";
+        BankAccount::display();
+        cout << "Overdraft Limit: " << overdraftLimit << endl;
+    }
+};
+
+class BusinessAccount : public BankAccount {
+    double corpTaxPercent;
+public:
+    BusinessAccount(int a, double b, double tax) : BankAccount(a, b), corpTaxPercent(tax) {}
+    void deposit(double amount) override {
+        double tax = amount * (corpTaxPercent / 100.0);
+        balance += (amount - tax);
+        cout << "Deposited: " << amount << " after corporate tax: " << tax << ". New Balance: " << balance << endl;
+    }
+    void display() override {
+        cout << "Business ";
+        BankAccount::display();
+        cout << "Corporate Tax: " << corpTaxPercent << "%" << endl;
+    }
+};
+
+// User Roles
+class User {
+public:
+    virtual void operate(BankAccount* acc) = 0;
+    virtual ~User() {}
+};
+
+class Customer : public User {
+public:
+    void operate(BankAccount* acc) override {
+        cout << "Customer Operations: 1) Deposit 2) Withdraw\nEnter choice: ";
+        int ch; cin >> ch;
+        if (ch == 1) {
+            double amt; cout << "Enter amount to deposit: "; cin >> amt;
+            acc->deposit(amt);
+        } else if (ch == 2) {
+            double amt; cout << "Enter amount to withdraw: "; cin >> amt;
+            acc->withdraw(amt);
+        }
+    }
+};
+
+class Employee : public User {
+public:
+    virtual void freezeAccount(BankAccount* acc) {
+        cout << "Account " << " frozen (simulation).\n";
+    }
+};
+
+class Teller : public Employee {
+public:
+    void operate(BankAccount* acc) override {
+        cout << "Teller Operations: 1) Deposit 2) Withdraw 3) Freeze Account\nEnter choice: ";
+        int ch; cin >> ch;
+        if (ch == 1) {
+            double amt; cout << "Enter deposit amount: "; cin >> amt;
+            acc->deposit(amt);
+        } else if (ch == 2) {
+            double amt; cout << "Enter withdrawal amount: "; cin >> amt;
+            acc->withdraw(amt);
+        } else if (ch == 3) {
+            freezeAccount(acc);
+        }
+    }
+};
+
+class Manager : public Employee {
+public:
+    void operate(BankAccount* acc) override {
+        cout << "Manager Operations: 1) Deposit 2) Withdraw 3) Freeze Account 4) Adjust Account (simulated)\nEnter choice: ";
+        int ch; cin >> ch;
+        if (ch == 1) {
+            double amt; cout << "Enter deposit amount: "; cin >> amt;
+            acc->deposit(amt);
+        } else if (ch == 2) {
+            double amt; cout << "Enter withdrawal amount: "; cin >> amt;
+            acc->withdraw(amt);
+        } else if (ch == 3) {
+            freezeAccount(acc);
+        } else if (ch == 4) {
+            cout << "Adjusting account settings (simulation).\n";
+        }
+    }
+};
+
+int main() {
+    vector<BankAccount*> accounts;
+    accounts.push_back(new SavingsAccount(1001, 5000, 2.5));
+    accounts.push_back(new CheckingAccount(1002, 2000, 1000));
+    accounts.push_back(new BusinessAccount(1003, 10000, 5.0));
+
+    vector<User*> users;
+    users.push_back(new Customer());
+    users.push_back(new Teller());
+    users.push_back(new Manager());
+
+    for (auto acc : accounts) {
+        acc->display();
+        cout << "\n--- User Operations ---\n";
+        for (auto user : users) {
+            user->operate(acc);
+            cout << endl;
+        }
+        cout << "-----------------------\n\n";
+    }
+
+    for (auto acc : accounts) delete acc;
+    for (auto user : users) delete user;
+
+    return 0;
+}

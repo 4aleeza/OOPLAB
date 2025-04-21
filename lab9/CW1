@@ -1,0 +1,73 @@
+/*Task 1:
+You have been asked to design a digital wallet application that users can top up, spend
+from, and check their balances. Each user can have only one wallet. The system needs
+to prevent unauthorized or invalid operations (for instance, negative balances or
+exceeding certain transaction limits).
+Tasks:
+
+Key Points to Consider:
+ How do you design the Wallet class so that internal states (balance, daily limit
+usage) are hidden?
+ How do you structure User to ensure the wallet cannot be manipulated outside
+the intended public interface?*/
+#include <iostream>
+using namespace std;
+/*1. Create a Wallet class that:
+o Holds the user’s balance as a private member.
+o Allows only deposit (top-up) and withdrawal (spend) operations through
+public methods.
+o Enforces maximum daily transaction limits (for deposit and withdrawal).
+*/
+class Wallet {
+	float userbal;
+	float depamt, withdrawamt;
+	float deplimit = 10000;
+	float withdrawlimit = 10000;
+public:
+	Wallet(float userbal, float depamt, float withdrawamt) : userbal(userbal), depamt(depamt), withdrawamt(withdrawamt) {};
+
+	bool setwithdrawamt(float withdrawamt) {
+		if (withdrawamt > withdrawlimit) {
+			cout << "Limit Reached. Sorry!\n";
+			return false;
+		}
+		else if (withdrawamt > userbal) {
+			cout << "Insufficient Funds!\n";
+			return false;
+		}
+		else userbal = userbal - withdrawamt;
+		cout << "Remaining Balance: " << userbal << endl;
+		return true;
+	}
+	bool setdeptamt(float deptamt) {
+		if (deptamt > deplimit) {
+			cout << "Limit Reached. Sorry!\n";
+			return false;
+		}
+		else userbal = userbal + deptamt;
+		cout << "New Balance: " << userbal << endl;
+		return true;
+	}
+	float getbal() {
+		return userbal;
+	}
+};
+class User {
+	string userID;
+	string name;
+	Wallet wallet;
+public:
+	User(string userID, string name, Wallet wallet) : userID(userID), name(name), wallet(wallet) {};
+	void deposit(float depo) {
+		if (wallet.setdeptamt(depo)) {
+			cout << userID << " deposited an amount of " << depo << endl;
+			cout << "New Balance: " << wallet.getbal();
+		}
+	}
+	void withdraw(float withdraw) {
+		if (wallet.setwithdrawamt(withdraw)) {
+			cout << userID << " withdrew an amount of " << withdraw << endl;
+			cout << "New Balance: " << wallet.getbal();
+		}
+	}
+};

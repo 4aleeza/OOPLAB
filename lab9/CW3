@@ -1,0 +1,106 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Doctor;
+class Billing;
+
+class PatientRecord {
+private:
+    string name;
+    int id;
+    string dateOfBirth;
+    string medicalHistory;
+    string currentTreatments;
+    string billingDetails;
+
+    friend class Doctor;
+    friend class Billing;
+
+    void updateMedicalHistory(const string& history) {
+        medicalHistory = history;
+    }
+
+    void updateCurrentTreatments(const string& treatments) {
+        currentTreatments = treatments;
+    }
+
+    void addBillingDetails(const string& billing) {
+        billingDetails = billing;
+    }
+
+public:
+    PatientRecord(const string& n, int i, const string& dob)
+        : name(n), id(i), dateOfBirth(dob) {}
+
+    void getPublicData() const {
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+        cout << "Date of Birth: " << dateOfBirth << endl;
+    }
+
+    void getMedicalData() const {
+        cout << "Medical History: " << medicalHistory << endl;
+        cout << "Current Treatments: " << currentTreatments << endl;
+    }
+
+    void getBillingData() const {
+        cout << "Billing Details: " << billingDetails << endl;
+    }
+};
+
+class Doctor {
+public:
+    void updatePatientRecord(PatientRecord& record, const string& history, const string& treatments) {
+        record.updateMedicalHistory(history);
+        record.updateCurrentTreatments(treatments);
+    }
+
+    void viewMedicalRecord(const PatientRecord& record) {
+        record.getMedicalData();
+    }
+};
+
+class Billing {
+public:
+    void addPatientBilling(PatientRecord& record, const string& billing) {
+        record.addBillingDetails(billing);
+    }
+
+    void viewBillingInfo(const PatientRecord& record) {
+        record.getBillingData();
+    }
+};
+
+class Receptionist {
+public:
+    void viewBasicInfo(const PatientRecord& record) {
+        record.getPublicData();
+    }
+};
+
+int main() {
+    PatientRecord patient("John Doe", 12345, "01/01/1980");
+
+    Doctor doc;
+    Billing bill;
+    Receptionist recep;
+
+    doc.updatePatientRecord(patient, "Diabetes, Hypertension", "Insulin Therapy");
+    bill.addPatientBilling(patient, "Outstanding Balance: $500");
+
+    cout << "--- Doctor accessing medical data ---" << endl;
+    doc.viewMedicalRecord(patient);
+
+    cout << "--- Billing staff accessing billing data ---" << endl;
+    bill.viewBillingInfo(patient);
+
+    cout << "--- Receptionist accessing public data ---" << endl;
+    recep.viewBasicInfo(patient);
+
+    // Unauthorized access examples (should not be possible)
+    // recep.viewMedicalRecord(patient); // Error: Receptionist has no access
+    // recep.viewBillingInfo(patient);   // Error: Receptionist has no access
+
+    return 0;
+}

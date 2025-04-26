@@ -1,0 +1,105 @@
+#include <iostream>
+#include <string>
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
+class Flight {
+private:
+    string flightNumber;
+    string departure;
+    string arrival;
+    int capacity;
+    int bookedSeats;
+    unordered_map<int, string> seatAssignments;
+
+public:
+    Flight(const string& fn, const string& dep, const string& arr, int cap)
+        : flightNumber(fn), departure(dep), arrival(arr), capacity(cap), bookedSeats(0) {}
+
+    bool bookSeat(int passengerID, const string& passengerName) {
+        if (bookedSeats >= capacity) {
+            cout << "Booking failed: Flight is full.\n";
+            return false;
+        }
+        if (seatAssignments.count(passengerID)) {
+            cout << "Booking failed: Passenger already booked.\n";
+            return false;
+        }
+        seatAssignments[passengerID] = passengerName;
+        bookedSeats++;
+        cout << "Seat booked for " << passengerName << " on flight " << flightNumber << ".\n";
+        return true;
+    }
+
+    bool cancelSeat(int passengerID) {
+        if (!seatAssignments.count(passengerID)) {
+            cout << "Cancellation failed: No seat booked for passenger.\n";
+            return false;
+        }
+        seatAssignments.erase(passengerID);
+        bookedSeats--;
+        cout << "Seat cancelled for passenger ID " << passengerID << " on flight " << flightNumber << ".\n";
+        return true;
+    }
+
+    bool upgradeSeat(int passengerID) {
+        if (!seatAssignments.count(passengerID)) {
+            cout << "Upgrade failed: No seat booked for passenger.\n";
+            return false;
+        }
+        cout << "Seat upgraded for passenger " << seatAssignments[passengerID] << " on flight " << flightNumber << ".\n";
+        return true;
+    }
+
+    void showFlightStatus() const {
+        cout << "Flight: " << flightNumber << ", " << departure << " -> " << arrival << endl;
+        cout << "Capacity: " << capacity << ", Booked: " << bookedSeats << endl;
+    }
+};
+
+class Passenger {
+private:
+    int id;
+    string name;
+
+public:
+    Passenger(int i, const string& n) : id(i), name(n) {}
+
+    void requestBooking(Flight& flight) {
+        flight.bookSeat(id, name);
+    }
+
+    void requestCancellation(Flight& flight) {
+        flight.cancelSeat(id);
+    }
+
+    void requestUpgrade(Flight& flight) {
+        flight.upgradeSeat(id);
+    }
+};
+
+int main() {
+    Flight flight1("AB123", "New York", "London", 2);
+    Flight flight2("CD456", "Paris", "Tokyo", 1);
+
+    Passenger p1(1, "Alice");
+    Passenger p2(2, "Bob");
+    Passenger p3(3, "Charlie");
+
+    flight1.showFlightStatus();
+    flight2.showFlightStatus();
+
+    p1.requestBooking(flight1);
+    p2.requestBooking(flight1);
+    p3.requestBooking(flight1);
+
+    p3.requestBooking(flight2);
+
+    p2.requestUpgrade(flight1);
+
+    p1.requestCancellation(flight1);
+
+    p3.requestBooking(flight1);
+
+    flight1.showFlightStatus

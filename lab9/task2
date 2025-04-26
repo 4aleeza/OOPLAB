@@ -1,0 +1,60 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Car {
+protected:
+    string model;
+    double price;
+public:
+    Car(const string& m) : model(m), price(0.0) {}
+    string getModel() const {
+        return model;
+    }
+    double getPrice() const {
+        return price;
+    }
+    void setModel(const string& m) {
+        model = m;
+    }
+    virtual void setPrice(double p) = 0;
+};
+
+class Color : public Car {
+private:
+    string color;
+public:
+    Color(const string& m, const string& c) : Car(m), color(c) {}
+    void setPrice(double p) override {
+        price = p + 1000;
+    }
+    string getColor() const {
+        return color;
+    }
+};
+
+class Company : public Car {
+private:
+    string companyName;
+public:
+    Company(const string& m, const string& company) : Car(m), companyName(company) {}
+    void setPrice(double p) override {
+        price = p + 2000;
+    }
+    string getCompanyName() const {
+        return companyName;
+    }
+};
+
+int main() {
+    Color car1("Model X", "Red");
+    car1.setPrice(30000);
+
+    Company car2("Model Y", "Tesla");
+    car2.setPrice(40000);
+
+    cout << "Car 1: " << car1.getModel() << ", Color: " << car1.getColor() << ", Price: $" << car1.getPrice() << endl;
+    cout << "Car 2: " << car2.getModel() << ", Company: " << car2.getCompanyName() << ", Price: $" << car2.getPrice() << endl;
+
+    return 0;
+}

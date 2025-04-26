@@ -1,0 +1,86 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Person {
+protected:
+    string name;
+    int age;
+public:
+    virtual void getData() {
+        cout << "Enter name: ";
+        cin >> name;
+        cout << "Enter age: ";
+        cin >> age;
+    }
+    virtual void displayData() const {
+        cout << "Name: " << name << ", Age: " << age << endl;
+    }
+    virtual void bonus() const = 0;
+    virtual ~Person() {}
+};
+
+class Admin : virtual public Person {
+protected:
+    double salary;
+public:
+    void getData() override {
+        Person::getData();
+        cout << "Enter salary (Admin): ";
+        cin >> salary;
+    }
+    void displayData() const override {
+        Person::displayData();
+        cout << "Salary (Admin): " << salary << endl;
+    }
+    void bonus() const override {
+        cout << "Admin Bonus: " << salary * 0.10 << endl;
+    }
+};
+
+class Account : virtual public Person {
+protected:
+    double balance;
+public:
+    void getData() override {
+        Person::getData();
+        cout << "Enter balance (Account): ";
+        cin >> balance;
+    }
+    void displayData() const override {
+        Person::displayData();
+        cout << "Balance (Account): " << balance << endl;
+    }
+    void bonus() const override {
+        cout << "Account Bonus: " << balance * 0.05 << endl;
+    }
+};
+
+class Master : public Admin, public Account {
+public:
+    void getData() override {
+        Person::getData();
+        cout << "Enter salary (Master): ";
+        cin >> salary;
+        cout << "Enter balance (Master): ";
+        cin >> balance;
+    }
+    void displayData() const override {
+        Person::displayData();
+        cout << "Salary (Master): " << salary << ", Balance (Master): " << balance << endl;
+    }
+    void bonus() const override {
+        cout << "Master Bonus: " << (salary * 0.10 + balance * 0.05) << endl;
+    }
+};
+
+int main() {
+    Person* ptr;
+    Master m;
+    ptr = &m;
+    ptr->getData();
+    ptr->displayData();
+    ptr->bonus();
+
+    return 0;
+}

@@ -1,0 +1,35 @@
+#include <iostream>
+#include <fstream>
+#include <filesystem>
+using namespace std;
+namespace fs = filesystem;
+
+const string LOG_FILE = "log.txt";
+const size_t MAX_SIZE = 1024 * 1024;
+
+int getNextLogIndex() {
+    int i = 1;
+    while (fs::exists("log" + to_string(i) + ".txt")) i++;
+    return i;
+}
+
+void rotateLog() {
+    int index = getNextLogIndex();
+    fs::rename(LOG_FILE, "log" + to_string(index) + ".txt");
+}
+
+void logMessage(const string& msg) {
+    if (fs::exists(LOG_FILE) && fs::file_size(LOG_FILE) > MAX_SIZE) {
+        rotateLog();
+    }
+    ofstream out(LOG_FILE, ios::app);
+    out << msg << endl;
+    out.close();
+}
+
+int main() {
+    for (int i = 0; i < 500000; ++i) {
+        logMessage("Log entry number: " + to_string(i));
+    }
+    return 0;
+}

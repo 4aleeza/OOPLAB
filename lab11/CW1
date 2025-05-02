@@ -1,0 +1,77 @@
+#include <iostream>
+#include <variant>
+#include <stdexcept>
+#include <string>
+
+class BadTypeException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Bad type requested!";
+    }
+};
+
+template <typename... Types>
+class TypeSafeContainer {
+private:
+    std::variant<Types...> data;
+
+public:
+    // Store function template to store any type
+    template <typename T>
+    void store(const T& value) {
+        data = value;
+    }
+
+    // Get function template to retrieve the stored value of the correct type
+    template <typename T>
+    T get() const {
+        try {
+            return std::get<T>(data);
+        }
+        catch (const std::bad_variant_access&) {
+            throw BadTypeException();
+        }
+    }
+};
+
+int main() {
+    TypeSafeContainer<int, double, std::string> container;
+
+    container.store(42); // Store an int
+    try {
+        int value = container.get<int>(); // Correct type
+        std::cout << "Stored int: " << value << std::endl;
+
+        // Uncommenting the next line will throw an exception
+        // std::string wrongType = container.get<std::string>(); // Wrong type
+    }
+    catch (const BadTypeException& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    container.store(3.14); // Store a double
+    try {
+        double value = container.get<double>(); // Correct type
+        std::cout << "Stored double: " << value << std::endl;
+
+        // Uncommenting the next line will throw an exception
+        // int wrongType = container.get<int>(); // Wrong type
+    }
+    catch (const BadTypeException& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    container.store(std::string("Hello, World!")); // Store a string
+    try {
+        std::string value = container.get<std::string>(); // Correct type
+        std::cout << "Stored string: " << value << std::endl;
+
+        // Uncommenting the next line will throw an exception
+        // double wrongType = container.get<double>(); // Wrong type
+    }
+    catch (const BadTypeException& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    return 0;
+}

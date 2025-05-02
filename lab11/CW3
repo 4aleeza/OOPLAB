@@ -1,0 +1,59 @@
+#include <iostream>
+#include <stdexcept>
+using namespace std;
+
+class ArrayIndexOutOfBounds : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Array index is out of bounds!";
+    }
+};
+
+template <typename T>
+class SafeArray {
+private:
+    T* arr;
+    size_t size;
+
+public:
+    SafeArray(size_t s) : size(s) {
+        arr = new T[size];
+    }
+
+    ~SafeArray() {
+        delete[] arr;
+    }
+
+    size_t getSize() const { return size; }
+
+    T& operator[](size_t index) {
+        if (index >= size || index < 0) {
+            throw ArrayIndexOutOfBounds();
+        }
+        return arr[index];
+    }
+};
+
+int main() {
+    try {
+        SafeArray<int> arr(5);
+
+        for (size_t i = 0; i < arr.getSize(); ++i) {
+            arr[i] = i * 10;
+        }
+
+        cout << "Array elements:" << endl;
+        for (size_t i = 0; i < arr.getSize(); ++i) {
+            cout << arr[i] << " ";
+        }
+        cout << endl;
+
+        cout << "Accessing invalid index:" << endl;
+        cout << arr[10] << endl;  // This will throw an exception
+    }
+    catch (const ArrayIndexOutOfBounds& e) {
+        cout << e.what() << endl;
+    }
+
+    return 0;
+}

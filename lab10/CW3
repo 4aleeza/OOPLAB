@@ -1,0 +1,66 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
+void createDummyData() {
+    ofstream users("users.txt");
+    users << "1,Linus\n2,Ada\n";
+    users.close();
+    ofstream products("products.txt");
+    products << "10,Laptop\n11,Mouse\n12,Keyboard\n";
+    products.close();
+    ofstream user_product("user_product.txt");
+    user_product << "1,10\n1,12\n2,11\n";
+    user_product.close();
+}
+
+int main() {
+    createDummyData();
+    unordered_map<int, string> userMap, productMap;
+    vector<int> linusProducts;
+    ifstream ufile("users.txt");
+    string line;
+    while (getline(ufile, line)) {
+        stringstream ss(line);
+        string id, name;
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        userMap[stoi(id)] = name;
+    }
+    int linusId = -1;
+    for (auto& pair : userMap) {
+        if (pair.second == "Linus") {
+            linusId = pair.first;
+            break;
+        }
+    }
+    if (linusId == -1) {
+        cout << "User Linus not found.\n";
+        return 0;
+    }
+    ifstream upfile("user_product.txt");
+    while (getline(upfile, line)) {
+        stringstream ss(line);
+        string uid, pid;
+        getline(ss, uid, ',');
+        getline(ss, pid, ',');
+        if (stoi(uid) == linusId)
+            linusProducts.push_back(stoi(pid));
+    }
+    ifstream pfile("products.txt");
+    while (getline(pfile, line)) {
+        stringstream ss(line);
+        string id, name;
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        productMap[stoi(id)] = name;
+    }
+    cout << "Products associated with Linus:\n";
+    for (int pid : linusProducts) {
+        cout << productMap[pid] << endl;
+    }
+    return 0;
+}

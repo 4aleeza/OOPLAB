@@ -1,0 +1,96 @@
+#include <iostream>
+#include <vector>
+#include <stdexcept>
+using namespace std;
+
+class DimensionMismatchException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Matrix dimensions do not match for the operation!";
+    }
+};
+
+template <typename T>
+class Matrix {
+private:
+    vector<vector<T>> mat;
+    size_t rows, cols;
+
+public:
+    Matrix(size_t r, size_t c) : rows(r), cols(c) {
+        mat.resize(r, vector<T>(c));
+    }
+
+    size_t getRows() const { return rows; }
+    size_t getCols() const { return cols; }
+
+    void set(size_t r, size_t c, const T& value) {
+        if (r >= rows || c >= cols) throw out_of_range("Index out of bounds");
+        mat[r][c] = value;
+    }
+
+    T get(size_t r, size_t c) const {
+        if (r >= rows || c >= cols) throw out_of_range("Index out of bounds");
+        return mat[r][c];
+    }
+
+    Matrix<T> operator+(const Matrix<T>& other) const {
+        if (this->rows != other.rows || this->cols != other.cols) {
+            throw DimensionMismatchException();
+        }
+
+        Matrix<T> result(rows, cols);
+        for (size_t i = 0; i < rows; ++i) {
+            for (size_t j = 0; j < cols; ++j) {
+                result.set(i, j, mat[i][j] + other.mat[i][j]);
+            }
+        }
+        return result;
+    }
+
+    Matrix<T> operator*(const Matrix<T>& other) const {
+        if (this->cols != other.rows) {
+            throw DimensionMismatchException();
+        }
+
+        Matrix<T> result(this->rows, other.cols);
+        for (size_t i = 0; i < this->rows; ++i) {
+            for (size_t j = 0; j < other.cols; ++j) {
+                T sum = 0;
+                for (size_t k = 0; k < this->cols; ++k) {
+                    sum += mat[i][k] * other.mat[k][j];
+                }
+                result.set(i, j, sum);
+            }
+        }
+        return result;
+    }
+};
+
+int main() {
+    Matrix<int> mat1(2, 2);
+    mat1.set(0, 0, 1);
+    mat1.set(0, 1, 2);
+    mat1.set(1, 0, 3);
+    mat1.set(1, 1, 4);
+
+    Matrix<int> mat2(2, 2);
+    mat2.set(0, 0, 5);
+    mat2.set(0, 1, 6);
+    mat2.set(1, 0, 7);
+    mat2.set(1, 1, 8);
+
+    try {
+        Matrix<int> result = mat1 + mat2;
+        cout << "Matrix addition result:" << endl;
+        for (size_t i = 0; i < result.getRows(); ++i) {
+            for (size_t j = 0; j < result.getCols(); ++j) {
+                cout << result.get(i, j) << " ";
+            }
+            cout << endl;
+        }
+
+        Matrix<int> prod = mat1 * mat2;
+        cout << "Matrix multiplication result:" << endl;
+        for (size_t i = 0; i < prod.getRows(); ++i) {
+            for (size_t j =_

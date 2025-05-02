@@ -1,0 +1,71 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+using namespace std;
+
+struct Employee {
+    int id;
+    string name;
+    string designation;
+    int years;
+};
+
+void writeDummyData(const string& filename) {
+    ofstream file(filename);
+    file << "1,Ali,Manager,3\n";
+    file << "2,Sam,Developer,1\n";
+    file << "3,Sara,Manager,2\n";
+    file << "4,Tom,Intern,1\n";
+    file.close();
+}
+
+vector<Employee> readEmployees(const string& filename) {
+    vector<Employee> employees;
+    ifstream file(filename);
+    string line;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string token;
+        Employee emp;
+        getline(ss, token, ',');
+        emp.id = stoi(token);
+        getline(ss, emp.name, ',');
+        getline(ss, emp.designation, ',');
+        getline(ss, token, ',');
+        emp.years = stoi(token);
+        employees.push_back(emp);
+    }
+    return employees;
+}
+
+void writeEmployees(const string& filename, const vector<Employee>& employees) {
+    ofstream file(filename);
+    for (const auto& emp : employees) {
+        file << emp.id << "," << emp.name << "," << emp.designation << "," << emp.years << "\n";
+    }
+    file.close();
+}
+
+int main() {
+    string filename = "employees.txt";
+    writeDummyData(filename);
+    vector<Employee> all = readEmployees(filename);
+    vector<Employee> managers;
+    for (auto& emp : all) {
+        if (emp.designation == "Manager" && emp.years >= 2) {
+            managers.push_back(emp);
+        }
+    }
+    cout << "Query Result (Managers with >=2 years):\n";
+    for (auto& e : managers)
+        cout << e.id << " " << e.name << " " << e.designation << " " << e.years << "\n";
+    writeEmployees(filename, managers);
+    for (auto& e : managers) {
+        e.id += 10;
+        e.years += 1;
+    }
+    writeEmployees(filename, managers);
+    cout << "Updated data written to file.\n";
+    return 0;
+}

@@ -1,0 +1,88 @@
+#include <iostream>
+#include <stdexcept>
+#include <vector>
+using namespace std;
+
+// Exception class for stack underflow
+class StackUnderflowException : public std::exception {
+public:
+    const char* what() const noexcept override {
+        return "Stack underflow error: Stack is empty!";
+    }
+};
+
+// Stack class template
+template <typename T>
+class Stack {
+private:
+    vector<T> stackData;
+
+public:
+    // Push an element onto the stack
+    void push(const T& value) {
+        stackData.push_back(value);
+    }
+
+    // Pop an element from the stack
+    void pop() {
+        if (stackData.empty()) {
+            throw StackUnderflowException();
+        }
+        stackData.pop_back();
+    }
+
+    // Get the top element of the stack
+    T top() const {
+        if (stackData.empty()) {
+            throw StackUnderflowException();
+        }
+        return stackData.back();
+    }
+
+    // Check if the stack is empty
+    bool isEmpty() const {
+        return stackData.empty();
+    }
+
+    // Get the size of the stack
+    size_t size() const {
+        return stackData.size();
+    }
+};
+
+int main() {
+    Stack<int> s;
+
+    try {
+        // Pushing elements onto the stack
+        cout << "Pushing elements onto the stack:" << endl;
+        s.push(10);
+        s.push(20);
+        s.push(30);
+        cout << "Size of stack after pushes: " << s.size() << endl;
+
+        // Checking top element
+        cout << "Top element: " << s.top() << endl;
+
+        // Popping elements from the stack
+        cout << "Popping top element." << endl;
+        s.pop();
+        cout << "Top element after pop: " << s.top() << endl;
+
+        // Checking the size after pop
+        cout << "Size of stack after pop: " << s.size() << endl;
+
+        // Pop remaining elements
+        s.pop();
+        s.pop();
+
+        // Attempt to access top or pop from an empty stack (this will throw an exception)
+        cout << "Trying to access top on an empty stack:" << endl;
+        cout << s.top() << endl;
+    }
+    catch (const StackUnderflowException& e) {
+        cout << e.what() << endl;
+    }
+
+    return 0;
+}
